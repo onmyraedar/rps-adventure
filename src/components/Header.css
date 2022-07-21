@@ -1,0 +1,10 @@
+.header {
+    display: flex;
+    color: #cacaca;
+    font-size: 24px;
+}
+
+.app-title {
+    margin-right: 45px;
+    font-weight: 600;
+}
