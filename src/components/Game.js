@@ -32,7 +32,7 @@ function Game() {
     ]);
     const [gameData, setGameData] = useState({
         round: 0,
-        userCardID: ""
+        activeCard: {}
     });
 
     return(
@@ -50,10 +50,17 @@ function Game() {
                                 <p>{card.type}</p>
                             </div>
                             <p>{card.winChance}% win chance against {card.weakAgainst} type cards</p>
-                            <button value={card.id} onClick={(e) => setGameData({
-                                ...gameData,
-                                userCardID: e.target.value
-                            })}>Play this card</button>
+                            <button value={card.id} onClick={(e) => {
+                                const filteredInventory = inventory.filter(
+                                    card => card.id === e.target.value
+                                );
+                                const lastPlayedCard = filteredInventory[0];
+                                console.log(lastPlayedCard);
+                                setGameData({
+                                    ...gameData,
+                                    activeCard: lastPlayedCard
+                                });
+                            }}>Play this card</button>
                         </div>
                     ))}
                 </div>
@@ -61,7 +68,16 @@ function Game() {
             <div className="game-container-right">
                 <h1>Play a card.</h1>
                 <h3>Round: {gameData.round}</h3>
-                <h3>{gameData.userCardID}</h3>
+                <h3>You just played this card:</h3>
+                <div key={gameData.activeCard.id} className="card-container">
+                    <p className="card-name">
+                        <b>{gameData.activeCard.name}</b>
+                    </p>
+                    <div className="card-type-badge">
+                        <p>{gameData.activeCard.type}</p>
+                    </div>
+                    <p>{gameData.activeCard.winChance}% win chance against {gameData.activeCard.weakAgainst} type cards</p>
+                </div>
             </div>
         </div>
     );

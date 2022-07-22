@@ -1,5 +1,10 @@
 .game-container {
+    display: flex;
     color: #cacaca;
+}
+
+.game-container-left {
+    margin-right: 20px;
 }
 
 .inventory {
