@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import uniqid from "uniqid";
 import Card from "./Card.js";
+import generateComputerPlay from "../game/generateComputerPlay.js";
 import "./Game.css";
 
 function Game() {
@@ -33,18 +34,23 @@ function Game() {
     ]);
     const [gameData, setGameData] = useState({
         round: 1,
-        activeCard: {}
+        activeCard: {},
+        computerCard: {}
     });
     
     function savePlayedCard(e) {
         const lastPlayedCard = inventory.find(
             (card) => card.id === e.target.value
         );
-        console.log(lastPlayedCard.id);
-        setGameData({
+        const computerChoice = generateComputerPlay();
+        setGameData((gameData) => {
+            return {
             ...gameData,
-            activeCard: lastPlayedCard
-        });      
+            activeCard: lastPlayedCard,
+            computerCard: computerChoice
+            }
+        });  
+        console.log(gameData.computerCard.id);
     } 
 
     return(
@@ -63,6 +69,8 @@ function Game() {
                 <h3>Round: {gameData.round}</h3>
                 <h3>You just played this card:</h3>
                 <Card key={gameData.activeCard.id} card={gameData.activeCard} playable={false} onPlay={savePlayedCard}/> 
+                <h3>The computer played this card:</h3>
+                <Card key={gameData.computerCard.id} card={gameData.computerCard} playable={false} onPlay={savePlayedCard}/> 
             </div>
         </div>
     );
