@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import uniqid from "uniqid";
 import Card from "./Card.js";
+import declareWinner from "../game/declareWinner.js";
 import generateComputerPlay from "../game/generateComputerPlay.js";
 import "./Game.css";
 
@@ -34,23 +35,59 @@ function Game() {
     ]);
     const [gameData, setGameData] = useState({
         round: 1,
-        activeCard: {},
-        computerCard: {}
+        stage: "Play",
+        playerCard: {},
+        computerCard: {},
+        winner: ""
     });
     
-    function savePlayedCard(e) {
-        const lastPlayedCard = inventory.find(
+    function playRound(e) {
+        const playerChoice = inventory.find(
             (card) => card.id === e.target.value
         );
         const computerChoice = generateComputerPlay();
+        const roundWinner = declareWinner(playerChoice, computerChoice);
         setGameData((gameData) => {
             return {
             ...gameData,
-            activeCard: lastPlayedCard,
-            computerCard: computerChoice
+            stage: "Results",
+            playerCard: playerChoice,
+            computerCard: computerChoice,
+            winner: roundWinner
             }
-        });  
-        console.log(gameData.computerCard.id);
+        });
+    } 
+
+    function resetGameData() {
+        setGameData((gameData) => {
+            return {
+            ...gameData,
+            round: gameData.round + 1,
+            stage: "Play",
+            playerCard: {},
+            computerCard: {},
+            }
+        });        
+    }
+
+    let gameboard;
+    if (gameData.stage === "Play") {
+        gameboard =
+        <div>
+            <h3>Round: {gameData.round}, {gameData.stage} Stage</h3>
+            <h3>Play a card.</h3>
+        </div>
+    } else if (gameData.stage === "Results") {
+        gameboard = 
+        <div>
+            <h3>Round: {gameData.round}, {gameData.stage} Stage</h3>
+            <h3>You just played this card:</h3>
+            <Card key={gameData.playerCard.id} card={gameData.playerCard} playable={false} onPlay={playRound}/> 
+            <h3>The computer played this card:</h3>
+            <Card key={gameData.computerCard.id} card={gameData.computerCard} playable={false} onPlay={playRound}/> 
+            <button onClick={resetGameData}>Next</button>
+            <p>Winner: {gameData.winner}</p>
+        </div>
     } 
 
     return(
@@ -60,17 +97,12 @@ function Game() {
                 <h3>Your Cards</h3>
                 <div className="inventory">
                     {inventory.map((card) => (
-                        <Card key={card.id} card={card} playable={true} onPlay={savePlayedCard}/>
+                        <Card key={card.id} card={card} playable={gameData.stage === "Play" ? true : false} onPlay={playRound}/>
                     ))}
                 </div>
             </div>
             <div className="game-container-right">
-                <h1>Play a card.</h1>
-                <h3>Round: {gameData.round}</h3>
-                <h3>You just played this card:</h3>
-                <Card key={gameData.activeCard.id} card={gameData.activeCard} playable={false} onPlay={savePlayedCard}/> 
-                <h3>The computer played this card:</h3>
-                <Card key={gameData.computerCard.id} card={gameData.computerCard} playable={false} onPlay={savePlayedCard}/> 
+                {gameboard}
             </div>
         </div>
     );
