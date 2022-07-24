@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import uniqid from "uniqid";
 import Card from "./Card.js";
+import calculateRoundCoins from "../game/calculateRoundCoins.js";
+import calculateRoundScore from "../game/calculateRoundScore.js";
 import declareWinner from "../game/declareWinner.js";
 import generateComputerPlay from "../game/generateComputerPlay.js";
 import "./Game.css";
@@ -34,6 +36,7 @@ function Game() {
         }
     ]);
     const [gameData, setGameData] = useState({
+        score: 0,
         round: 1,
         stage: "Play",
         playerCard: {},
@@ -50,12 +53,14 @@ function Game() {
         setGameData((gameData) => {
             return {
             ...gameData,
+            score: gameData.score + calculateRoundScore(roundWinner),
             stage: "Results",
             playerCard: playerChoice,
             computerCard: computerChoice,
             winner: roundWinner
             }
         });
+        setCoins((coins) => coins + calculateRoundCoins(roundWinner));
     } 
 
     function resetGameData() {
@@ -66,6 +71,7 @@ function Game() {
             stage: "Play",
             playerCard: {},
             computerCard: {},
+            winner: ""
             }
         });        
     }
@@ -94,6 +100,7 @@ function Game() {
         <div className="game-container">
             <div className="game-container-left">
                 <h3>Coins: {coins}</h3>
+                <h3>Score: {gameData.score}</h3>
                 <h3>Your Cards</h3>
                 <div className="inventory">
                     {inventory.map((card) => (
