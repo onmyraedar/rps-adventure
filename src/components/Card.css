@@ -1,0 +1,18 @@
+
+.card-container {
+    padding: 10px;
+    background-color: #272727;
+    border-radius: 10px;
+}
+
+.card-name {
+    margin: 0;
+    font-size: 24px;
+}
+
+.card-type-badge {
+    max-width: 100px;
+    background-color: #9B5EFF;
+    border-radius: 10px;
+    text-align: center;
+}
