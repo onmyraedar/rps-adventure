@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import uniqid from "uniqid";
 import Card from "./Card.js";
+import GameboardCard from "./GameboardCard.js";
 import calculateRoundCoins from "../game/calculateRoundCoins.js";
 import calculateRoundScore from "../game/calculateRoundScore.js";
 import declareWinner from "../game/declareWinner.js";
@@ -39,10 +40,26 @@ function Game() {
         score: 0,
         round: 1,
         stage: "Play",
-        playerCard: {},
+        playerCurrentCard: {},
+        playerNextCard: {},
+        isOnFront: false,
         computerCard: {},
         winner: ""
     });
+
+    function selectCard(e) {
+        const playerChoice = inventory.find(
+            (card) => card.id === e.target.value
+        );
+        setGameData((gameData) => {
+            return {
+            ...gameData,
+            playerCurrentCard: gameData.playerNextCard,
+            playerNextCard: playerChoice,
+            isOnFront: !gameData.isOnFront
+            }
+        });                
+    }
     
     function playRound(e) {
         const playerChoice = inventory.find(
@@ -78,11 +95,16 @@ function Game() {
 
     let gameboard;
     if (gameData.stage === "Play") {
-        gameboard =
+        gameboard = 
         <div>
             <h3>Round: {gameData.round}, {gameData.stage} Stage</h3>
             <h3>Play a card.</h3>
-        </div>
+            <GameboardCard 
+                currentCard={gameData.playerCurrentCard}
+                nextCard={gameData.playerNextCard}
+                isOnFront={gameData.isOnFront}
+            />
+        </div>      
     } else if (gameData.stage === "Results") {
         gameboard = 
         <div>
@@ -94,7 +116,7 @@ function Game() {
             <button onClick={resetGameData}>Next</button>
             <p>Winner: {gameData.winner}</p>
         </div>
-    } 
+    }
 
     return(
         <div className="game-container">
@@ -104,7 +126,7 @@ function Game() {
                 </div>
                 <div className="inventory">
                     {inventory.map((card) => (
-                        <Card key={card.id} card={card} playable={gameData.stage === "Play" ? true : false} onPlay={playRound}/>
+                        <Card key={card.id} card={card} playable={gameData.stage !== "Results" ? true : false} onPlay={selectCard}/>
                     ))}
                 </div>
             </div>
