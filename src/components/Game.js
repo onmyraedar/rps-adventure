@@ -99,8 +99,6 @@ function Game() {
     return(
         <div className="game-container">
             <div className="game-container-left">
-                <h3>Coins: {coins}</h3>
-                <h3>Score: {gameData.score}</h3>
                 <h3>Your Cards</h3>
                 <div className="inventory">
                     {inventory.map((card) => (
@@ -108,8 +106,12 @@ function Game() {
                     ))}
                 </div>
             </div>
-            <div className="game-container-right">
+            <div className="game-container-center">
                 {gameboard}
+            </div>
+            <div className="game-container-right">
+                <h3>Coins: {coins}</h3>
+                <h3>Score: {gameData.score}</h3>
             </div>
         </div>
     );
