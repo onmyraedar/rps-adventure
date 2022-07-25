@@ -11,6 +11,11 @@
     align-items: center;
 }
 
+.section-header {
+    font-family: "Inter", sans-serif;
+    font-weight: 900;
+}
+
 .inventory {
     max-height: 400px;
     overflow-y: scroll;

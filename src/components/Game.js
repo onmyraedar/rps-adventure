@@ -99,7 +99,9 @@ function Game() {
     return(
         <div className="game-container">
             <div className="game-container-left">
-                <h3>Inventory</h3>
+                <div className="section-header">
+                    <h3>Inventory</h3>
+                </div>
                 <div className="inventory">
                     {inventory.map((card) => (
                         <Card key={card.id} card={card} playable={gameData.stage === "Play" ? true : false} onPlay={playRound}/>
@@ -110,6 +112,9 @@ function Game() {
                 {gameboard}
             </div>
             <div className="game-container-right">
+                <div className="section-header">
+                    <h3>Stats</h3>
+                </div>
                 <h3>Coins: {coins}</h3>
                 <h3>Score: {gameData.score}</h3>
             </div>
