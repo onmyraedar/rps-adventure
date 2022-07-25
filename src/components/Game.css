@@ -39,3 +39,12 @@
     background: #cacaca;
     border-radius: 100vw;
 }
+
+.gameboard-card-container {
+    display: flex;
+    gap: 50px;
+}
+
+.confirm-btn {
+    margin-top: 30px;
+}

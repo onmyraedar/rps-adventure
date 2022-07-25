@@ -42,8 +42,10 @@ function Game() {
         stage: "Play",
         playerCurrentCard: {},
         playerNextCard: {},
-        isOnFront: false,
-        computerCard: {},
+        playerCardIsOnFront: false,
+        computerCardIsOnFront: false,
+        computerCurrentCard: {},
+        computerNextCard: {},
         winner: ""
     });
 
@@ -56,7 +58,7 @@ function Game() {
             ...gameData,
             playerCurrentCard: gameData.playerNextCard,
             playerNextCard: playerChoice,
-            isOnFront: !gameData.isOnFront
+            playerCardIsOnFront: !gameData.playerCardIsOnFront
             }
         });                
     }
@@ -70,8 +72,8 @@ function Game() {
             ...gameData,
             score: gameData.score + calculateRoundScore(roundWinner),
             stage: "Results",
-            playerCard: playerChoice,
-            computerCard: computerChoice,
+            computerNextCard: computerChoice,
+            computerCardIsOnFront: !gameData.computerCardIsOnFront,
             winner: roundWinner
             }
         });
@@ -94,30 +96,53 @@ function Game() {
     let gameboard;
     if (gameData.stage === "Play") {
         gameboard = 
-        <div>
+        <div className="gameboard">
             <h3>Round: {gameData.round}, {gameData.stage} Stage</h3>
             <h3>Play a card.</h3>
-            <GameboardCard 
-                currentCard={gameData.playerCurrentCard}
-                nextCard={gameData.playerNextCard}
-                isOnFront={gameData.isOnFront}
-            />
+            <div className="gameboard-card-container">
+                <div className="player-card-container">
+                    <h3>You</h3>
+                    <GameboardCard 
+                        currentCard={gameData.playerCurrentCard}
+                        nextCard={gameData.playerNextCard}
+                        isOnFront={gameData.playerCardIsOnFront}
+                    />
+                </div>
+                <div className="computer-card-container">
+                    <h3>Computer</h3>
+                    <GameboardCard 
+                        currentCard={gameData.computerCurrentCard}
+                        nextCard={gameData.computerNextCard}
+                        isOnFront={gameData.computerCardIsOnFront}
+                    />                
+                </div>
+            </div>
             <button className="confirm-btn" onClick={playRound}>Confirm</button>
         </div>      
     } else if (gameData.stage === "Results") {
         gameboard = 
         <div>
             <h3>Round: {gameData.round}, {gameData.stage} Stage</h3>
-            <h3>You just played this card:</h3>
-            <GameboardCard 
-                currentCard={gameData.playerCurrentCard}
-                nextCard={gameData.playerNextCard}
-                isOnFront={gameData.isOnFront}
-            />
-            <h3>The computer played this card:</h3>
-            <Card key={gameData.computerCard.id} card={gameData.computerCard} playable={false} onPlay={playRound}/> 
+            <h3>Winner: {gameData.winner}</h3>
+            <div className="gameboard-card-container">
+                <div className="player-card-container">
+                    <h3>You</h3>
+                    <GameboardCard 
+                        currentCard={gameData.playerCurrentCard}
+                        nextCard={gameData.playerNextCard}
+                        isOnFront={gameData.playerCardIsOnFront}
+                    />
+                </div>
+                <div className="computer-card-container">
+                    <h3>Computer</h3>
+                    <GameboardCard 
+                        currentCard={gameData.computerCurrentCard}
+                        nextCard={gameData.computerNextCard}
+                        isOnFront={gameData.computerCardIsOnFront}
+                    />                
+                </div>
+            </div> 
             <button onClick={resetGameData}>Next</button>
-            <p>Winner: {gameData.winner}</p>
         </div>
     }
 
