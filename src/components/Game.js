@@ -62,9 +62,7 @@ function Game() {
     }
     
     function playRound(e) {
-        const playerChoice = inventory.find(
-            (card) => card.id === e.target.value
-        );
+        const playerChoice = gameData.playerNextCard;
         const computerChoice = generateComputerPlay();
         const roundWinner = declareWinner(playerChoice, computerChoice);
         setGameData((gameData) => {
@@ -104,13 +102,18 @@ function Game() {
                 nextCard={gameData.playerNextCard}
                 isOnFront={gameData.isOnFront}
             />
+            <button className="confirm-btn" onClick={playRound}>Confirm</button>
         </div>      
     } else if (gameData.stage === "Results") {
         gameboard = 
         <div>
             <h3>Round: {gameData.round}, {gameData.stage} Stage</h3>
             <h3>You just played this card:</h3>
-            <Card key={gameData.playerCard.id} card={gameData.playerCard} playable={false} onPlay={playRound}/> 
+            <GameboardCard 
+                currentCard={gameData.playerCurrentCard}
+                nextCard={gameData.playerNextCard}
+                isOnFront={gameData.isOnFront}
+            />
             <h3>The computer played this card:</h3>
             <Card key={gameData.computerCard.id} card={gameData.computerCard} playable={false} onPlay={playRound}/> 
             <button onClick={resetGameData}>Next</button>
