@@ -41,12 +41,30 @@ function Game() {
         round: 1,
         stage: "Play",
         playerCurrentCard: {},
-        playerNextCard: {},
+        playerNextCard: {
+            id: uniqid(),
+            name: "Player Card Back",
+            type: "Card Back",
+            strongAgainst: "None",
+            weakAgainst: "None",
+            winChance: 0
+        },
         playerCardIsOnFront: false,
         computerCardIsOnFront: false,
         computerCurrentCard: {},
-        computerNextCard: {},
-        winner: ""
+        computerNextCard: {
+            id: uniqid(),
+            name: "Computer Card Back",
+            type: "Card Back",
+            strongAgainst: "None",
+            weakAgainst: "None",
+            winChance: 0
+        },
+        winner: "",
+        cardSelectAlert: {
+            isOn: false,
+            text: "You must select a card!"
+        }
     });
 
     function selectCard(e) {
@@ -58,26 +76,43 @@ function Game() {
             ...gameData,
             playerCurrentCard: gameData.playerNextCard,
             playerNextCard: playerChoice,
-            playerCardIsOnFront: !gameData.playerCardIsOnFront
+            playerCardIsOnFront: !gameData.playerCardIsOnFront,
+            cardSelectAlert: {
+                isOn: false,
+                text: "You must select a card!"
+            }
             }
         });                
     }
     
     function playRound(e) {
-        const playerChoice = gameData.playerNextCard;
-        const computerChoice = generateComputerPlay();
-        const roundWinner = declareWinner(playerChoice, computerChoice);
-        setGameData((gameData) => {
-            return {
-            ...gameData,
-            score: gameData.score + calculateRoundScore(roundWinner),
-            stage: "Results",
-            computerNextCard: computerChoice,
-            computerCardIsOnFront: !gameData.computerCardIsOnFront,
-            winner: roundWinner
-            }
-        });
-        setCoins((coins) => coins + calculateRoundCoins(roundWinner));
+        if (gameData.playerNextCard.type === "Card Back") {
+            setGameData((gameData) => {
+                return {
+                ...gameData,
+                cardSelectAlert: {
+                    isOn: true,
+                    text: "You must select a card!"
+                }
+                }
+            });
+        } else {
+            const playerChoice = gameData.playerNextCard;
+            const computerChoice = generateComputerPlay();
+            const roundWinner = declareWinner(playerChoice, computerChoice);
+            setGameData((gameData) => {
+                return {
+                ...gameData,
+                score: gameData.score + calculateRoundScore(roundWinner),
+                stage: "Results",
+                computerCurrentCard: gameData.computerNextCard,
+                computerNextCard: computerChoice,
+                computerCardIsOnFront: !gameData.computerCardIsOnFront,
+                winner: roundWinner
+                }
+            });
+            setCoins((coins) => coins + calculateRoundCoins(roundWinner));
+        }
     } 
 
     function resetGameData() {
@@ -86,8 +121,26 @@ function Game() {
             ...gameData,
             round: gameData.round + 1,
             stage: "Play",
-            playerCard: {},
-            computerCard: {},
+            playerCurrentCard: gameData.playerNextCard,
+            playerNextCard: {
+                id: uniqid(),
+                name: "Player Card Back",
+                type: "Card Back",
+                strongAgainst: "None",
+                weakAgainst: "None",
+                winChance: 0
+            },
+            playerCardIsOnFront: !gameData.playerCardIsOnFront,
+            computerCurrentCard: gameData.computerNextCard,
+            computerNextCard: {
+                id: uniqid(),
+                name: "Computer Card Back",
+                type: "Card Back",
+                strongAgainst: "None",
+                weakAgainst: "None",
+                winChance: 0
+            },
+            computerCardIsOnFront: !gameData.computerCardIsOnFront,
             winner: ""
             }
         });        
@@ -159,6 +212,7 @@ function Game() {
                 </div>
             </div>
             <div className="game-container-center">
+                {gameData.cardSelectAlert.isOn && gameData.cardSelectAlert.text}
                 {gameboard}
             </div>
             <div className="game-container-right">
