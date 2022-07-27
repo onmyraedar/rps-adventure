@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import EmojiEvents from "@mui/icons-material/EmojiEventsRounded";
+import SettingsSuggest from "@mui/icons-material/SettingsSuggestRounded";
+import Warning from "@mui/icons-material/WarningRounded";
 import uniqid from "uniqid";
 import Card from "./Card.js";
 import GameboardCard from "./GameboardCard.js";
@@ -150,8 +153,7 @@ function Game() {
     if (gameData.stage === "Play") {
         gameboard = 
         <div className="gameboard">
-            <h3>Round: {gameData.round}, {gameData.stage} Stage</h3>
-            <h3>Play a card.</h3>
+            <p className="instructions">Play a card.</p>
             <div className="gameboard-card-container">
                 <div className="player-card-container">
                     <h3>You</h3>
@@ -170,13 +172,20 @@ function Game() {
                     />                
                 </div>
             </div>
-            <button className="confirm-btn" onClick={playRound}>Confirm</button>
+            <div className="btn-container">
+                <button className="confirm-btn" onClick={playRound}>Confirm</button>
+                {gameData.cardSelectAlert.isOn && 
+                    <div className="card-select-alert">
+                        <Warning />
+                        <b>{gameData.cardSelectAlert.text}</b>
+                    </div>
+                }
+            </div>
         </div>      
     } else if (gameData.stage === "Results") {
         gameboard = 
-        <div>
-            <h3>Round: {gameData.round}, {gameData.stage} Stage</h3>
-            <h3>Winner: {gameData.winner}</h3>
+        <div className="gameboard">
+            <p className="instructions">Winner: {gameData.winner}</p>
             <div className="gameboard-card-container">
                 <div className="player-card-container">
                     <h3>You</h3>
@@ -195,7 +204,9 @@ function Game() {
                     />                
                 </div>
             </div> 
-            <button onClick={resetGameData}>Next</button>
+            <div className="btn-container">
+                <button onClick={resetGameData}>Next</button>
+            </div>
         </div>
     }
 
@@ -212,15 +223,23 @@ function Game() {
                 </div>
             </div>
             <div className="game-container-center">
-                {gameData.cardSelectAlert.isOn && gameData.cardSelectAlert.text}
+                <div className="section-header">
+                    <h3>Round {gameData.round}</h3>
+                </div>
                 {gameboard}
             </div>
             <div className="game-container-right">
                 <div className="section-header">
                     <h3>Stats</h3>
                 </div>
-                <h3>Coins: {coins}</h3>
-                <h3>Score: {gameData.score}</h3>
+                <h3>
+                    <SettingsSuggest />
+                    Coins: {coins}
+                </h3>
+                <h3>
+                    <EmojiEvents />
+                    Score: {gameData.score}
+                </h3>
             </div>
         </div>
     );

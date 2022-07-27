@@ -11,9 +11,14 @@
     align-items: center;
 }
 
+.game-container-right {
+    padding: 0px 50px;
+}
+
 .section-header {
     font-family: "Inter", sans-serif;
     font-weight: 900;
+    text-align: center;
 }
 
 .inventory {
@@ -40,11 +45,23 @@
     border-radius: 100vw;
 }
 
+.gameboard .instructions {
+    margin: 0px;
+    font-size: 24px;
+}
+
 .gameboard-card-container {
     display: flex;
     gap: 50px;
+    margin-bottom: 50px;
 }
 
-.confirm-btn {
-    margin-top: 30px;
+.btn-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.card-select-alert {
+    color: #FFCC70; 
 }
